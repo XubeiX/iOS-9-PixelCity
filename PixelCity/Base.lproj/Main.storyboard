@@ -42,7 +42,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2VW-d6-YQK">
-                                <rect key="frame" x="351" y="661" width="55" height="55"/>
+                                <rect key="frame" x="351" y="660" width="55" height="55"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="55" id="4G6-1Z-Nai"/>
                                     <constraint firstAttribute="height" constant="55" id="ncq-Qb-9RQ"/>
@@ -52,21 +52,21 @@
                                     <action selector="centerMapButtonWasPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dXP-lw-tmp"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nPS-E1-Vd2">
-                                <rect key="frame" x="0.0" y="735" width="414" height="0.0"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nPS-E1-Vd2">
+                                <rect key="frame" x="0.0" y="735" width="414" height="1"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="nPS-E1-Vd2" secondAttribute="height" multiplier="414:1" id="Fxe-zI-Qlr"/>
+                                    <constraint firstAttribute="height" constant="1" id="Hh6-is-ITq"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="2VW-d6-YQK" secondAttribute="bottom" constant="20" id="4BG-9r-d4h"/>
                             <constraint firstItem="639-NQ-vG1" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="4yQ-zM-nyK"/>
                             <constraint firstItem="KUM-Gz-0kc" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="54O-Vo-Auf"/>
                             <constraint firstItem="KUM-Gz-0kc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="OVW-cu-MCs"/>
                             <constraint firstItem="KUM-Gz-0kc" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="WbG-A7-KYC"/>
+                            <constraint firstItem="nPS-E1-Vd2" firstAttribute="top" secondItem="2VW-d6-YQK" secondAttribute="bottom" constant="20" id="ZfI-ba-TVu"/>
                             <constraint firstItem="639-NQ-vG1" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="d66-iY-QQe"/>
                             <constraint firstItem="nPS-E1-Vd2" firstAttribute="top" secondItem="KUM-Gz-0kc" secondAttribute="bottom" id="dQJ-nE-Hv5"/>
                             <constraint firstItem="639-NQ-vG1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ntd-yr-l5d"/>
@@ -79,6 +79,8 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="KUM-Gz-0kc" id="Zp7-oR-coz"/>
+                        <outlet property="pullUpHeightConstraints" destination="Hh6-is-ITq" id="gX8-4u-Wgm"/>
+                        <outlet property="pullUpView" destination="nPS-E1-Vd2" id="3Tz-k8-YTZ"/>
                     </connections>
                 </viewController>
             </objects>

@@ -9,6 +9,8 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Alamofire
+import AlamofireImage
 
 class MapVC: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var mapView: MKMapView!
@@ -25,6 +27,9 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     var flowLayout = UICollectionViewFlowLayout()
     var collectionView: UICollectionView?
     
+    var imageUrlArray = [String]()
+    var imageArray = [UIImage]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
@@ -37,6 +42,8 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         collectionView?.delegate = self
         collectionView?.dataSource = self
         pullUpView.addSubview(collectionView!)
+        
+        registerForPreviewing(with: self, sourceView: collectionView!)
     }
 
     @IBAction func centerMapButtonWasPressed(_ sender: Any) {
@@ -66,6 +73,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @objc func animateViewDown(){
+        cancelAllSessions()
         pullUpHeightConstraints.constant = 0
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
@@ -101,7 +109,6 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
             progressLbl?.removeFromSuperview()
         }
     }
-    
 }
 
 extension MapVC: MKMapViewDelegate {
@@ -126,14 +133,14 @@ extension MapVC: MKMapViewDelegate {
     }
     
     @objc func dropPin( sender: UITapGestureRecognizer ){
+        cancelAllSessions()
+        imageArray = []
+        imageUrlArray = []
+        collectionView?.reloadData()
         removePin()
         removeSpinner()
         removeProgressLabel()
-        animateViewUp()
-        addSwipe()
-        addSpinner()
-        addProgressLabel()
-        
+       
         let touchPoint = sender.location(in: mapView)
         let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         
@@ -142,11 +149,73 @@ extension MapVC: MKMapViewDelegate {
         
         let coordinateRegion = MKCoordinateRegion.init(center: touchCoordinate, latitudinalMeters: regionRadius * 2, longitudinalMeters: regionRadius * 2)
         mapView.setRegion(coordinateRegion, animated: true)
+        
+        animateViewUp()
+        addSwipe()
+        addSpinner()
+        addProgressLabel()
+        
+        retrivesUrls(forAnnotation: annotation) { (sucess) in
+            if sucess {
+                self.retriveImages(handler: { (sucess) in
+                    if sucess {
+                        self.removeSpinner()
+                        self.removeProgressLabel()
+                        self.collectionView?.reloadData()
+                    }
+                })
+            }
+        }
     }
     
     func removePin(){
         for annotation in mapView.annotations {
             mapView.removeAnnotation(annotation)
+        }
+    }
+    
+    func retrivesUrls(forAnnotation annotation: DroppablePin, handler: @escaping (_ status: Bool) -> () ){
+        imageUrlArray = []
+        
+        Alamofire.request(flickrUrl(forApiKey: API_KEY, withAnnotation: annotation, andNumberOfPhotos: 30))
+            .responseJSON { (response) in
+                guard let json = response.result.value as? Dictionary<String, AnyObject> else {
+                    handler(false)
+                    return
+                }
+                
+                let photosDict = json["photos"] as! Dictionary<String, AnyObject>
+                let photosDictArray = photosDict["photo"] as! [Dictionary<String, AnyObject>]
+                
+                for photo in photosDictArray {
+                    let postUrl = "https://farm\(photo["farm"]!).staticflickr.com/\(photo["server"]!)/\(photo["id"]!)_\(photo["secret"]!).jpg"
+                    self.imageUrlArray.append(postUrl)
+                }
+                
+                handler(true)
+        }
+    }
+    
+    func retriveImages(handler: @escaping (_ status: Bool) -> ()){
+        imageArray = []
+        
+        for imageUrl in imageUrlArray {
+            Alamofire.request(imageUrl).responseImage { (response) in
+                guard let image = response.result.value else { return }
+                self.imageArray.append(image)
+                self.progressLbl?.text = "\(self.imageArray.count)/30 images"
+                
+                if self.imageArray.count == self.imageUrlArray.count {
+                    handler(true)
+                }
+            }
+        }
+    }
+    
+    func cancelAllSessions() {
+        Alamofire.SessionManager.default.session.getTasksWithCompletionHandler { (sessionDataTask, uploadData, downloadData) in
+            sessionDataTask.forEach({ $0.cancel() })
+            downloadData.forEach({ $0.cancel() })
         }
     }
 }
@@ -167,15 +236,44 @@ extension MapVC: CLLocationManagerDelegate {
 
 extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell
-        return cell!
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell else { return UICollectionViewCell() }
+        let imageFromIndex = imageArray[indexPath.row]
+        let imageView = UIImageView(image: imageFromIndex)
+        cell.addSubview(imageView)
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return imageArray.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let popVC = storyboard?.instantiateViewController(withIdentifier: "popVC") as? PopVC else { return }
+        popVC.initData(forImage: imageArray[indexPath.row])
+        present(popVC, animated: true, completion: nil)
+    }
+}
+
+extension MapVC : UIViewControllerPreviewingDelegate {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexpath = collectionView?.indexPathForItem(at: location), let cell = collectionView?.cellForItem(at: indexpath) else {
+            return nil
+        }
+        
+        guard let popVC = storyboard?.instantiateViewController(withIdentifier: "popVC") as? PopVC else {
+            return nil
+        }
+        
+        popVC.initData(forImage: imageArray[indexpath.row])
+        previewingContext.sourceRect = cell.contentView.frame
+        return popVC
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
     }
 }

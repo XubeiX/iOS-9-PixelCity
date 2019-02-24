@@ -13,7 +13,6 @@
         <!--MapVC-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <viewController id="BYZ-38-t0r" customClass="MapVC" customModule="PixelCity" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
@@ -67,9 +66,9 @@
                             <constraint firstItem="KUM-Gz-0kc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="OVW-cu-MCs"/>
                             <constraint firstItem="KUM-Gz-0kc" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="WbG-A7-KYC"/>
                             <constraint firstItem="nPS-E1-Vd2" firstAttribute="top" secondItem="2VW-d6-YQK" secondAttribute="bottom" constant="20" id="ZfI-ba-TVu"/>
-                            <constraint firstItem="639-NQ-vG1" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="d66-iY-QQe"/>
+                            <constraint firstItem="639-NQ-vG1" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="d66-iY-QQe"/>
                             <constraint firstItem="nPS-E1-Vd2" firstAttribute="top" secondItem="KUM-Gz-0kc" secondAttribute="bottom" id="dQJ-nE-Hv5"/>
-                            <constraint firstItem="639-NQ-vG1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ntd-yr-l5d"/>
+                            <constraint firstItem="639-NQ-vG1" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ntd-yr-l5d"/>
                             <constraint firstAttribute="trailing" secondItem="nPS-E1-Vd2" secondAttribute="trailing" id="sTg-an-J6a"/>
                             <constraint firstAttribute="bottom" secondItem="nPS-E1-Vd2" secondAttribute="bottom" id="t3s-ff-AFj"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="2VW-d6-YQK" secondAttribute="trailing" constant="8" id="tSj-wU-eHX"/>
@@ -83,8 +82,60 @@
                         <outlet property="pullUpView" destination="nPS-E1-Vd2" id="3Tz-k8-YTZ"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="131.8840579710145" y="132.88043478260872"/>
+        </scene>
+        <!--PopVC-->
+        <scene sceneID="OVo-h0-oyd">
+            <objects>
+                <viewController storyboardIdentifier="popVC" id="mEP-DY-Uni" customClass="PopVC" customModule="PixelCity" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Eps-pB-D7C">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FNv-GF-RVi">
+                                <rect key="frame" x="0.0" y="-9" width="414" height="745"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="efC-kB-T9C">
+                                <rect key="frame" x="107" y="691" width="200" height="25"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Double-tap to dismiss" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FVI-M7-kFR">
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="25"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="FVI-M7-kFR" firstAttribute="top" secondItem="efC-kB-T9C" secondAttribute="top" id="0nf-aF-hoI"/>
+                                    <constraint firstItem="FVI-M7-kFR" firstAttribute="leading" secondItem="efC-kB-T9C" secondAttribute="leading" id="GXX-64-Ecu"/>
+                                    <constraint firstAttribute="height" constant="25" id="KHG-uV-pzr"/>
+                                    <constraint firstAttribute="width" constant="200" id="SsH-j9-Op3"/>
+                                    <constraint firstAttribute="bottom" secondItem="FVI-M7-kFR" secondAttribute="bottom" id="oJr-aZ-4uh"/>
+                                    <constraint firstAttribute="trailing" secondItem="FVI-M7-kFR" secondAttribute="trailing" id="p13-bl-O4X"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="FNv-GF-RVi" firstAttribute="leading" secondItem="Eps-pB-D7C" secondAttribute="leading" id="9Vh-ZW-0Md"/>
+                            <constraint firstAttribute="trailing" secondItem="FNv-GF-RVi" secondAttribute="trailing" id="H1F-A3-3QD"/>
+                            <constraint firstItem="efC-kB-T9C" firstAttribute="centerX" secondItem="Eps-pB-D7C" secondAttribute="centerX" id="HrC-jJ-SZy"/>
+                            <constraint firstItem="FNv-GF-RVi" firstAttribute="top" secondItem="Eps-pB-D7C" secondAttribute="top" id="U0l-Qj-ntC"/>
+                            <constraint firstAttribute="bottom" secondItem="FNv-GF-RVi" secondAttribute="bottom" id="XZ2-R8-Qyc"/>
+                            <constraint firstAttribute="bottom" secondItem="efC-kB-T9C" secondAttribute="bottom" constant="20" id="uGb-pA-AXp"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="c2d-Nl-ZgW"/>
+                    </view>
+                    <connections>
+                        <outlet property="popImageView" destination="FNv-GF-RVi" id="lf3-0B-Ivj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jPZ-CV-AEo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1102.8985507246377" y="132.88043478260872"/>
         </scene>
     </scenes>
     <resources>
